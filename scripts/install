@@ -166,7 +166,7 @@ chown -R $app:www-data "$final_path"
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring PHP-FPM..." --time --weight=1
+# ynh_script_progression --message="Configuring PHP-FPM..." --time --weight=1
 
 ### `ynh_add_fpm_config` is used to set up a PHP config.
 ### You can remove it if your app doesn't use PHP.
@@ -180,7 +180,18 @@ ynh_script_progression --message="Configuring PHP-FPM..." --time --weight=1
 ###		- And the section "PHP-FPM CONFIGURATION" in the upgrade script
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+# ynh_add_fpm_config
+
+# yarn install
+# yarn run build:prod
+# yarn run install:python
+# yarn start
+
+# Or compose
+
+curl https://get.docker.com | sudo sh
+
+# Grist will be available at http://localhost:8484/
 
 #=================================================
 # NGINX CONFIGURATION
@@ -243,13 +254,15 @@ ynh_script_progression --message="Adding a configuration file..." --time --weigh
 ###
 ### Check the documentation of `ynh_add_config` for more info.
 
-ynh_add_config --template="some_config_file" --destination="$final_path/some_config_file"
+ynh_add_config --template="docker-compose.yml" --destination="$final_path/docker-compose.yml"
 
 # FIXME: this should be handled by the core in the future
 # You may need to use chmod 600 instead of 400,
 # for example if the app is expected to be able to modify its own config
-chmod 400 "$final_path/some_config_file"
-chown $app:$app "$final_path/some_config_file"
+chmod 400 "$final_path/docker-compose.yml"
+chown $app:$app "$final_path/docker-compose.yml"
+
+sudo cd $final_path && docker compose up -d
 
 ### For more complex cases where you want to replace stuff using regexes,
 ### you shoud rely on ynh_replace_string (which is basically a wrapper for sed)
