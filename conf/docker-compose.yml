@@ -1,0 +1,19 @@
+services:
+  grist:
+    image: gristlabs/grist
+    environment:
+      GRIST_FORWARD_AUTH_HEADER: X-Forwarded-User
+      # GRIST_FORWARD_AUTH_LOGOUT_PATH: _oauth/logout
+      GRIST_SINGLE_ORG: grist  # alternatively, GRIST_ORG_IN_PATH: "true" for multi-team operation
+      DOC_HOME_URL: https://__APP_URL__
+      GRIST_ORG_IN_PATH: false
+      GRIST_SUPPORT_ANON: true
+        #  GRIST_DEFAULT_EMAIL: 
+      DEBUG: 1
+      APP_HOME_URL: https://__APP_URL__
+    ports:
+      - "127.0.0.1:8484:8484"
+    volumes:
+      # You may want to put state somewhere other than /tmp :-)
+      - /var/lib/grist/data:/persist
+
